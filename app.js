@@ -24,6 +24,15 @@ function norm(s){
     .replace(/\p{Diacritic}/gu,'');
 }
 
+function escapeHtml(str){
+  return (str || '').toString()
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
 function setStatus(text, ok=true){
   status.textContent = text;
   status.style.color = ok ? '#64748b' : '#b91c1c';
@@ -59,7 +68,7 @@ function render(q){
 
   const hits = productos
     .filter(p => norm(p.producto).includes(query))
-    .slice(0, 80);
+    .slice(0, 120);
 
   if(hits.length === 0){
     results.innerHTML = `<div class="empty">Sin resultados para <strong>${escapeHtml(q)}</strong>.</div>`;
@@ -79,29 +88,56 @@ function render(q){
 }
 
 function seleccionar(p){
-  const m = muebles[p.mueble];
+  const keyId = (p.id_mueble || '').toString().trim();
+  const keyNombre = (p.mueble || '').toString().trim();
+
+  const m = (keyId && muebles[keyId]) ? muebles[keyId] : muebles[keyNombre];
+
+  // Si NO hay mueble configurado, devolvemos texto del campo MUEBLE (requisito).
   if(!m){
-    viewerTitle.textContent = 'Mueble sin plano';
-    viewerMeta.textContent = `No existe configuración para “${p.mueble}”.`;
     overlay.innerHTML = '';
-    card.hidden = true;
+    muebleImg.removeAttribute('src');
+
+    viewerTitle.textContent = p.producto;
+    viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
+
+    card.hidden = false;
+    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
+    smallMueble.textContent = keyNombre;
+    cardProducto.textContent = p.producto;
     return;
   }
 
-  // Set image
+  // Cargar imagen del mueble
+  muebleImg.onerror = () => {
+    overlay.innerHTML = '';
+    viewerTitle.textContent = p.producto;
+    viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
+
+    card.hidden = false;
+    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
+    smallMueble.textContent = keyNombre;
+    cardProducto.textContent = p.producto;
+  };
+
   muebleImg.src = m.image;
+
   muebleImg.onload = () => {
-    // Zones are in image pixels; we need to scale to the rendered size
-    const z = m.zones[p.ubicacion];
     overlay.innerHTML = '';
 
+    const ub = (p.ubicacion || '').toString().trim();
+    const z = (m.zones || {})[ub];
+
+    viewerTitle.textContent = p.producto;
+    viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
+
+    card.hidden = false;
+    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
+    smallMueble.textContent = keyNombre;
+    cardProducto.textContent = p.producto;
+
+    // Si la zona no existe, mostramos igual el texto (sin pintar)
     if(!z){
-      viewerTitle.textContent = p.producto;
-      viewerMeta.textContent = `Mueble: ${p.mueble} • Ubicación: ${p.ubicacion} (sin zona definida)`;
-      card.hidden = false;
-      badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
-      smallMueble.textContent = p.mueble;
-      cardProducto.textContent = p.producto;
       return;
     }
 
@@ -116,16 +152,6 @@ function seleccionar(p){
     box.style.height = (z.h * scaleY) + 'px';
 
     overlay.appendChild(box);
-
-    viewerTitle.textContent = p.producto;
-    viewerMeta.textContent = `Mueble: ${p.mueble} • Ubicación: ${p.ubicacion}`;
-
-    card.hidden = false;
-    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
-    smallMueble.textContent = p.mueble;
-    cardProducto.textContent = p.producto;
-
-    // Auto-scroll a la imagen en móvil
     document.getElementById('imageWrap').scrollIntoView({behavior:'smooth', block:'start'});
   };
 }
@@ -149,14 +175,5 @@ clearBtn.addEventListener('click', () => {
   render('');
   limpiar();
 });
-
-function escapeHtml(str){
-  return (str || '').toString()
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'",'&#039;');
-}
 
 cargar();

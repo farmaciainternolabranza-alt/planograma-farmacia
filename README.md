@@ -1,29 +1,27 @@
-# Demo Planograma – ESCRITORIO BLANCO
+# Planograma Farmacia (Fotos reales + buscador)
 
-Esta demo usa:
-- `data/productos.json` generado desde el Excel.
-- `data/muebles.json` con las **zonas (cajones 1–4)** del mueble **ESCRITORIO BLANCO**.
-- Imagen base: `images/escritorio_blanco.png`.
+Este repositorio publica una web (GitHub Pages) para buscar un producto y ver su **ubicación** en un **mueble**, pintando la zona correspondiente.
 
-## Cómo publicar en GitHub Pages
-1. Crea un repositorio (ej: `planograma-farmacia`).
-2. Sube **todo el contenido** de esta carpeta.
-3. En GitHub: **Settings → Pages → Deploy from branch → main / root**.
-4. Abre la URL que te entrega GitHub Pages.
+## Qué incluye
+- Buscador por texto libre (encuentra coincidencias en cualquier parte del nombre).
+- Datos desde `UBICACION MEDICAMENTOS FARMACIA 2026 (1).xlsx` → se convierten a `data/productos.json`.
+- Configuración de muebles y zonas en `data/muebles.json`.
+- **Fallback solicitado**: si un producto apunta a un mueble sin foto/configuración, el sistema muestra el texto del campo **MUEBLE** del Excel (sin imagen).
 
-## Cómo actualizar productos (rápido)
-- Opción simple: reemplaza `data/productos.json` por uno nuevo.
-- Opción recomendada (1 comando):
+## Publicar en GitHub Pages
+1. Sube todos los archivos del repo.
+2. En GitHub: **Settings → Pages → Deploy from branch**
+   - Branch: `main`
+   - Folder: `/ (root)`
 
-```bash
-python tools/generar_json.py
-```
+## Actualización automática
+Cada vez que subas un `.xlsx`, GitHub Actions ejecuta `tools/generar_json.py` y actualiza `data/productos.json`.
 
-> Nota: este script lee el archivo Excel `UBICACION MEDICAMENTOS FARMACIA 2026 (1).xlsx`.
-
-## Estructura de zonas del mueble
-Las zonas (cajones) están en `data/muebles.json` y son coordenadas en pixeles de la imagen.
+## Agregar un nuevo mueble
+1. Subir la foto original a `images/`.
+2. Definir las zonas en `data/muebles.json`.
+   - La clave debe coincidir con `ID_MUEBLE` (recomendado) o con `MUEBLE`.
 
 ---
 
-Hecho para una estética minimalista y funcional.
+Estilo destacado (highlight) usa el color: **#E82C9A**.

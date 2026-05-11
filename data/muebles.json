@@ -1,32 +1,238 @@
 {
+  "EB": {
+    "image": "images/escritorio_blanco.png",
+    "zones": {
+      "1": {
+        "x": 51,
+        "y": 103,
+        "w": 153,
+        "h": 755
+      },
+      "2": {
+        "x": 225,
+        "y": 103,
+        "w": 117,
+        "h": 755
+      },
+      "3": {
+        "x": 363,
+        "y": 103,
+        "w": 116,
+        "h": 755
+      },
+      "4": {
+        "x": 500,
+        "y": 103,
+        "w": 138,
+        "h": 755
+      }
+    },
+    "label_image": "images/rotulados/escritorio_blanco_rotulado.png",
+    "display_name": "ESCRITORIO BLANCO"
+  },
   "ESCRITORIO BLANCO": {
     "image": "images/escritorio_blanco.png",
     "zones": {
       "1": {
-        "x": 47,
-        "y": 99,
-        "w": 595,
-        "h": 190
+        "x": 51,
+        "y": 103,
+        "w": 153,
+        "h": 755
       },
       "2": {
-        "x": 47,
-        "y": 307,
-        "w": 656,
-        "h": 172
-      },
-      "4": {
-        "x": 54,
-        "y": 692,
-        "w": 578,
-        "h": 170
+        "x": 225,
+        "y": 103,
+        "w": 117,
+        "h": 755
       },
       "3": {
-        "x": 52,
-        "y": 492,
-        "w": 585,
-        "h": 187
+        "x": 363,
+        "y": 103,
+        "w": 116,
+        "h": 755
+      },
+      "4": {
+        "x": 500,
+        "y": 103,
+        "w": 138,
+        "h": 755
       }
     },
-    "label_image": "images/escritorio_blanco_rotulado.png"
+    "label_image": "images/rotulados/escritorio_blanco_rotulado.png",
+    "display_name": "ESCRITORIO BLANCO"
+  },
+  "IC": {
+    "image": "images/isla_central.png",
+    "zones": {
+      "1": {
+        "x": 53,
+        "y": 274,
+        "w": 245,
+        "h": 351
+      },
+      "2": {
+        "x": 319,
+        "y": 273,
+        "w": 260,
+        "h": 352
+      },
+      "3": {
+        "x": 600,
+        "y": 273,
+        "w": 245,
+        "h": 352
+      },
+      "4": {
+        "x": 866,
+        "y": 279,
+        "w": 241,
+        "h": 341
+      }
+    },
+    "label_image": "images/rotulados/isla_central_rotulado.png",
+    "display_name": "ISLA CENTRAL"
+  },
+  "ISLA CENTRAL": {
+    "image": "images/isla_central.png",
+    "zones": {
+      "1": {
+        "x": 53,
+        "y": 274,
+        "w": 245,
+        "h": 351
+      },
+      "2": {
+        "x": 319,
+        "y": 273,
+        "w": 260,
+        "h": 352
+      },
+      "3": {
+        "x": 600,
+        "y": 273,
+        "w": 245,
+        "h": 352
+      },
+      "4": {
+        "x": 866,
+        "y": 279,
+        "w": 241,
+        "h": 341
+      }
+    },
+    "label_image": "images/rotulados/isla_central_rotulado.png",
+    "display_name": "ISLA CENTRAL"
+  },
+  "IL": {
+    "image": "images/isla_lateral.png",
+    "zones": {
+      "5": {
+        "x": 10,
+        "y": 367,
+        "w": 310,
+        "h": 198
+      },
+      "6": {
+        "x": 341,
+        "y": 373,
+        "w": 184,
+        "h": 209
+      },
+      "7": {
+        "x": 546,
+        "y": 374,
+        "w": 161,
+        "h": 230
+      },
+      "8": {
+        "x": 728,
+        "y": 375,
+        "w": 119,
+        "h": 236
+      },
+      "9": {
+        "x": 868,
+        "y": 377,
+        "w": 124,
+        "h": 245
+      },
+      "10": {
+        "x": 1013,
+        "y": 377,
+        "w": 256,
+        "h": 250
+      }
+    },
+    "label_image": "images/rotulados/isla_lateral_rotulado.png",
+    "display_name": "ISLA LATERAL"
+  },
+  "ISLA LATERAL": {
+    "image": "images/isla_lateral.png",
+    "zones": {
+      "5": {
+        "x": 10,
+        "y": 367,
+        "w": 310,
+        "h": 198
+      },
+      "6": {
+        "x": 341,
+        "y": 373,
+        "w": 184,
+        "h": 209
+      },
+      "7": {
+        "x": 546,
+        "y": 374,
+        "w": 161,
+        "h": 230
+      },
+      "8": {
+        "x": 728,
+        "y": 375,
+        "w": 119,
+        "h": 236
+      },
+      "9": {
+        "x": 868,
+        "y": 377,
+        "w": 124,
+        "h": 245
+      },
+      "10": {
+        "x": 1013,
+        "y": 377,
+        "w": 256,
+        "h": 250
+      }
+    },
+    "label_image": "images/rotulados/isla_lateral_rotulado.png",
+    "display_name": "ISLA LATERAL"
+  },
+  "CAFE": {
+    "image": "images/mueble_cafe.png",
+    "zones": {
+      "MUEBLE CAFE": {
+        "x": 117,
+        "y": 15,
+        "w": 576,
+        "h": 1219
+      }
+    },
+    "label_image": "images/rotulados/mueble_cafe_rotulado.png",
+    "display_name": "MUEBLE CAFE"
+  },
+  "MUEBLE CAFE": {
+    "image": "images/mueble_cafe.png",
+    "zones": {
+      "MUEBLE CAFE": {
+        "x": 117,
+        "y": 15,
+        "w": 576,
+        "h": 1219
+      }
+    },
+    "label_image": "images/rotulados/mueble_cafe_rotulado.png",
+    "display_name": "MUEBLE CAFE"
   }
 }

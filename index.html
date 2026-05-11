@@ -21,8 +21,8 @@
   <main class="layout">
     <section class="panel">
       <label class="label" for="search">Buscar producto</label>
-      <input id="search" class="search" type="text" placeholder="Ej: comprimidos, captopril, ceftriaxona…" autocomplete="off" />
-      <div class="hint">Tip: la búsqueda encuentra coincidencias en cualquier parte del nombre.</div>
+      <input id="search" class="search" type="text" placeholder="Ej: comprimidos, amoxicilina, metformina…" autocomplete="off" />
+      <div class="hint">Encuentra coincidencias en cualquier parte del nombre. Ej: “comprimidos”.</div>
 
       <div class="results" id="results"></div>
     </section>
@@ -47,13 +47,15 @@
           <div class="small" id="smallMueble">Mueble</div>
         </div>
         <div class="cardTitle" id="cardProducto">Producto</div>
-        <div class="small" id="smallHelp">La zona marcada corresponde al cajón/sector definido en el plano del mueble.</div>
+        <div class="small" id="smallHelp">
+          Si no existe foto/configuración del mueble, se mostrará el texto del campo <strong>MUEBLE</strong> del Excel.
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <span>Demo con <strong>ESCRITORIO BLANCO</strong> • Datos desde <code>data/productos.json</code></span>
+    <span>Datos desde <code>data/productos.json</code> • Muebles en <code>data/muebles.json</code></span>
   </footer>
 
   <script src="app.js"></script>
