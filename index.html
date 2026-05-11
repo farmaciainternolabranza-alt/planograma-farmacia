@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planograma • Farmacia</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Rx</div>
+      <div>
+        <div class="title">Planograma</div>
+        <div class="subtitle">Búsqueda de ubicación por producto</div>
+      </div>
+    </div>
+    <div class="pill" id="status">Cargando datos…</div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <label class="label" for="search">Buscar producto</label>
+      <input id="search" class="search" type="text" placeholder="Ej: comprimidos, captopril, ceftriaxona…" autocomplete="off" />
+      <div class="hint">Tip: la búsqueda encuentra coincidencias en cualquier parte del nombre.</div>
+
+      <div class="results" id="results"></div>
+    </section>
+
+    <section class="viewer">
+      <div class="viewerHeader">
+        <div>
+          <div class="viewerTitle" id="viewerTitle">Selecciona un producto</div>
+          <div class="viewerMeta" id="viewerMeta">Se mostrará el mueble y la ubicación.</div>
+        </div>
+        <button class="ghost" id="clearBtn" title="Limpiar selección">Limpiar</button>
+      </div>
+
+      <div class="imageWrap" id="imageWrap">
+        <img id="muebleImg" alt="Mueble" />
+        <div id="overlay" class="overlay"></div>
+      </div>
+
+      <div class="card" id="card" hidden>
+        <div class="cardRow">
+          <div class="badge" id="badgeUbic">Ubicación</div>
+          <div class="small" id="smallMueble">Mueble</div>
+        </div>
+        <div class="cardTitle" id="cardProducto">Producto</div>
+        <div class="small" id="smallHelp">La zona marcada corresponde al cajón/sector definido en el plano del mueble.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Demo con <strong>ESCRITORIO BLANCO</strong> • Datos desde <code>data/productos.json</code></span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

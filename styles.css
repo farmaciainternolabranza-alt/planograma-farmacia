@@ -1,0 +1,149 @@
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --accent:#2563eb;
+  --accent2:#06b6d4;
+  --shadow:0 10px 25px rgba(2,6,23,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.7);
+  backdrop-filter:saturate(160%) blur(8px);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.brand{display:flex; gap:12px; align-items:center}
+.logo{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),#7c3aed);
+  color:#fff;font-weight:800;
+}
+.title{font-weight:800;letter-spacing:.2px}
+.subtitle{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{
+  font-size:12px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  color:var(--muted);
+}
+
+.layout{
+  display:grid;
+  grid-template-columns: 360px 1fr;
+  gap:16px;
+  padding:16px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.panel,.viewer{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+}
+.panel{padding:16px}
+.label{font-size:12px;color:var(--muted);display:block;margin-bottom:8px}
+.search{
+  width:100%;
+  padding:12px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  outline:none;
+  font-size:14px;
+}
+.search:focus{border-color:rgba(37,99,235,.45); box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.hint{margin-top:10px;color:var(--muted);font-size:12px}
+.results{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:70vh;overflow:auto;padding-right:4px}
+.item{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 10px;
+  cursor:pointer;
+  transition:transform .05s ease, border-color .2s ease, background .2s ease;
+}
+.item:hover{border-color:rgba(37,99,235,.35); background:rgba(37,99,235,.04)}
+.itemTitle{font-weight:650;font-size:13px;line-height:1.2}
+.itemMeta{margin-top:4px;color:var(--muted);font-size:12px}
+.empty{color:var(--muted);font-size:13px;padding:14px;border:1px dashed var(--line);border-radius:14px}
+
+.viewer{padding:16px;display:flex;flex-direction:column;gap:12px}
+.viewerHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.viewerTitle{font-weight:800}
+.viewerMeta{color:var(--muted);font-size:12px;margin-top:2px}
+.ghost{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  color:var(--text);
+}
+.ghost:hover{background:rgba(2,6,23,.03)}
+
+.imageWrap{
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:#fff;
+}
+#muebleImg{display:block;width:100%;height:auto}
+.overlay{position:absolute;inset:0;pointer-events:none}
+.highlight{
+  position:absolute;
+  border-radius:14px;
+  border:3px solid rgba(37,99,235,.95);
+  background:rgba(37,99,235,.18);
+  box-shadow:0 0 0 6px rgba(37,99,235,.12);
+  animation:pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.01)}
+}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  background:linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,1));
+}
+.cardRow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(37,99,235,.12);
+  border:1px solid rgba(37,99,235,.22);
+  color:rgba(37,99,235,.95);
+  font-size:12px;
+  font-weight:700;
+}
+.cardTitle{margin-top:10px;font-weight:800}
+.small{color:var(--muted);font-size:12px}
+.footer{max-width:1200px;margin:0 auto;padding:0 16px 18px;color:var(--muted);font-size:12px}
+
+@media (max-width: 980px){
+  .layout{grid-template-columns:1fr}
+  .results{max-height:38vh}
+}

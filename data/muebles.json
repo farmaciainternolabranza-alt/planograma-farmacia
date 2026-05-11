@@ -1,0 +1,32 @@
+{
+  "ESCRITORIO BLANCO": {
+    "image": "images/escritorio_blanco.png",
+    "zones": {
+      "1": {
+        "x": 47,
+        "y": 99,
+        "w": 595,
+        "h": 190
+      },
+      "2": {
+        "x": 47,
+        "y": 307,
+        "w": 656,
+        "h": 172
+      },
+      "4": {
+        "x": 54,
+        "y": 692,
+        "w": 578,
+        "h": 170
+      },
+      "3": {
+        "x": 52,
+        "y": 492,
+        "w": 585,
+        "h": 187
+      }
+    },
+    "label_image": "images/escritorio_blanco_rotulado.png"
+  }
+}
