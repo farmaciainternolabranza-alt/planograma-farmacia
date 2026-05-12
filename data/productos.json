@@ -2,13 +2,13 @@
   {
     "producto": "T.C.U. de Cobre",
     "mueble": "BODEGA",
-    "id_mueble": "",
+    "id_mueble": NaN,
     "ubicacion": "BODEGA"
   },
   {
     "producto": "Vaselina Liquida Medicinal (120 ml)",
     "mueble": "BODEGA",
-    "id_mueble": "",
+    "id_mueble": NaN,
     "ubicacion": "BODEGA"
   },
   {
