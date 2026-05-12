@@ -46,14 +46,21 @@ async function cargar(){
       fetch('data/productos.json').then(r=>r.json()),
       fetch('data/muebles.json').then(r=>r.json())
     ]);
+
     productos = p;
     muebles = m;
+
     setStatus(`Listo • ${productos.length} productos`);
     render('');
+
   }catch(e){
     console.error(e);
     setStatus('Error al cargar datos', false);
-    results.innerHTML = `<div class="empty">No se pudo cargar <code>data/productos.json</code> o <code>data/muebles.json</code>.</div>`;
+    results.innerHTML = `
+      <div class="empty">
+        No se pudo cargar <code>data/productos.json</code> o <code>data/muebles.json</code>
+      </div>
+    `;
   }
 }
 
@@ -62,7 +69,11 @@ function render(q){
   results.innerHTML = '';
 
   if(!query){
-    results.innerHTML = `<div class="empty">Escribe para buscar (ej: <strong>comprimidos</strong>).</div>`;
+    results.innerHTML = `
+      <div class="empty">
+        Escribe para buscar (ej: <strong>comprimidos</strong>)
+      </div>
+    `;
     return;
   }
 
@@ -71,17 +82,26 @@ function render(q){
     .slice(0, 120);
 
   if(hits.length === 0){
-    results.innerHTML = `<div class="empty">Sin resultados para <strong>${escapeHtml(q)}</strong>.</div>`;
+    results.innerHTML = `
+      <div class="empty">
+        Sin resultados para <strong>${escapeHtml(q)}</strong>
+      </div>
+    `;
     return;
   }
 
   for(const p of hits){
     const div = document.createElement('div');
     div.className = 'item';
+
     div.innerHTML = `
       <div class="itemTitle">${escapeHtml(p.producto)}</div>
-      <div class="itemMeta">Mueble: <strong>${escapeHtml(p.mueble)}</strong> • Ubicación: <strong>${escapeHtml(p.ubicacion)}</strong></div>
+      <div class="itemMeta">
+        Mueble: <strong>${escapeHtml(p.mueble)}</strong> • 
+        Ubicación: <strong>${escapeHtml(p.ubicacion)}</strong>
+      </div>
     `;
+
     div.addEventListener('click', () => seleccionar(p));
     results.appendChild(div);
   }
@@ -93,7 +113,7 @@ function seleccionar(p){
 
   const m = (keyId && muebles[keyId]) ? muebles[keyId] : muebles[keyNombre];
 
-  // Si NO hay mueble configurado, devolvemos texto del campo MUEBLE (requisito).
+  // ✅ Fallback si no existe el mueble
   if(!m){
     overlay.innerHTML = '';
     muebleImg.removeAttribute('src');
@@ -108,16 +128,10 @@ function seleccionar(p){
     return;
   }
 
-  // Cargar imagen del mueble
   muebleImg.onerror = () => {
     overlay.innerHTML = '';
     viewerTitle.textContent = p.producto;
     viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
-
-    card.hidden = false;
-    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
-    smallMueble.textContent = keyNombre;
-    cardProducto.textContent = p.producto;
   };
 
   muebleImg.src = m.image;
@@ -136,23 +150,41 @@ function seleccionar(p){
     smallMueble.textContent = keyNombre;
     cardProducto.textContent = p.producto;
 
-    // Si la zona no existe, mostramos igual el texto (sin pintar)
-    if(!z){
-      return;
-    }
+    if(!z) return;
 
     const scaleX = muebleImg.clientWidth / muebleImg.naturalWidth;
     const scaleY = muebleImg.clientHeight / muebleImg.naturalHeight;
 
     const box = document.createElement('div');
     box.className = 'highlight';
-    box.style.left = (z.x * scaleX) + 'px';
-    box.style.top  = (z.y * scaleY) + 'px';
-    box.style.width  = (z.w * scaleX) + 'px';
-    box.style.height = (z.h * scaleY) + 'px';
+
+    // ✅ ✅ POLÍGONO (MEJORA CLAVE)
+    if (z.poly && Array.isArray(z.poly) && z.poly.length >= 3) {
+
+      const puntos = z.poly
+        .map(([x, y]) => `${(x * scaleX).toFixed(2)}px ${(y * scaleY).toFixed(2)}px`)
+        .join(', ');
+
+      box.style.left = '0px';
+      box.style.top = '0px';
+      box.style.width = '100%';
+      box.style.height = '100%';
+
+      box.style.clipPath = `polygon(${puntos})`;
+      box.style.webkitClipPath = `polygon(${puntos})`;
+
+    } else {
+      // fallback rectangular
+      box.style.left = (z.x * scaleX) + 'px';
+      box.style.top  = (z.y * scaleY) + 'px';
+      box.style.width  = (z.w * scaleX) + 'px';
+      box.style.height = (z.h * scaleY) + 'px';
+    }
 
     overlay.appendChild(box);
-    document.getElementById('imageWrap').scrollIntoView({behavior:'smooth', block:'start'});
+
+    document.getElementById('imageWrap')
+      .scrollIntoView({behavior:'smooth', block:'start'});
   };
 }
 
@@ -164,6 +196,7 @@ function limpiar(){
   muebleImg.removeAttribute('src');
 }
 
+// debounce búsqueda
 let t=null;
 search.addEventListener('input', () => {
   clearTimeout(t);
@@ -176,4 +209,6 @@ clearBtn.addEventListener('click', () => {
   limpiar();
 });
 
+// 🚀 iniciar
 cargar();
+``
