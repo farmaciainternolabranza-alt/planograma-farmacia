@@ -143,13 +143,33 @@ function seleccionar(p){
 
     const scaleX = muebleImg.clientWidth / muebleImg.naturalWidth;
     const scaleY = muebleImg.clientHeight / muebleImg.naturalHeight;
+  
+onst box = document.createElement('div');
+box.className = 'highlight';
 
-    const box = document.createElement('div');
-    box.className = 'highlight';
-    box.style.left = (z.x * scaleX) + 'px';
-    box.style.top  = (z.y * scaleY) + 'px';
-    box.style.width  = (z.w * scaleX) + 'px';
-    box.style.height = (z.h * scaleY) + 'px';
+// Si hay polígono → usar clip-path
+if (z.poly) {
+
+  const puntos = z.poly.map(p => {
+    return `${p[0] * scaleX}px ${p[1] * scaleY}px`;
+  }).join(',');
+
+  box.style.position = 'absolute';
+  box.style.left = '0px';
+  box.style.top = '0px';
+  box.style.width = muebleImg.clientWidth + 'px';
+  box.style.height = muebleImg.clientHeight + 'px';
+  box.style.clipPath = `polygon(${puntos})`;
+
+} else {
+
+  // fallback rectangular
+  box.style.left = (z.x * scaleX) + 'px';
+  box.style.top  = (z.y * scaleY) + 'px';
+  box.style.width  = (z.w * scaleX) + 'px';
+  box.style.height = (z.h * scaleY) + 'px';
+
+}
 
     overlay.appendChild(box);
     document.getElementById('imageWrap').scrollIntoView({behavior:'smooth', block:'start'});
