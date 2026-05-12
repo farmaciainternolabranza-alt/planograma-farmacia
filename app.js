@@ -1,99 +1,179 @@
 let productos = [];
 let muebles = {};
 
-const search = document.getElementById("search");
-const results = document.getElementById("results");
-const overlay = document.getElementById("overlay");
-const img = document.getElementById("muebleImg");
-const status = document.getElementById("status");
+const $ = (id) => document.getElementById(id);
+const search = $('search');
+const results = $('results');
+const status = $('status');
+const muebleImg = $('muebleImg');
+const overlay = $('overlay');
+const viewerTitle = $('viewerTitle');
+const viewerMeta = $('viewerMeta');
+const clearBtn = $('clearBtn');
 
-// ✅ Carga robusta
-async function cargar() {
-  try {
-    const resProd = await fetch('data/productos.json');
-    const resMueb = await fetch('data/muebles.json');
+const card = $('card');
+const badgeUbic = $('badgeUbic');
+const smallMueble = $('smallMueble');
+const cardProducto = $('cardProducto');
 
-    productos = await resProd.json();
-    muebles = await resMueb.json();
+function norm(s){
+  return (s || '')
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu,'');
+}
 
-    status.textContent = "Listo ✅";
-  } catch (e) {
+function escapeHtml(str){
+  return (str || '').toString()
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function setStatus(text, ok=true){
+  status.textContent = text;
+  status.style.color = ok ? '#64748b' : '#b91c1c';
+  status.style.borderColor = ok ? '#e2e8f0' : 'rgba(185,28,28,.25)';
+  status.style.background = ok ? '#fff' : 'rgba(185,28,28,.06)';
+}
+
+async function cargar(){
+  try{
+    const [p, m] = await Promise.all([
+      fetch('data/productos.json').then(r=>r.json()),
+      fetch('data/muebles.json').then(r=>r.json())
+    ]);
+    productos = p;
+    muebles = m;
+    setStatus(`Listo • ${productos.length} productos`);
+    render('');
+  }catch(e){
     console.error(e);
-    status.textContent = "Error cargando datos ❌";
+    setStatus('Error al cargar datos', false);
+    results.innerHTML = `<div class="empty">No se pudo cargar <code>data/productos.json</code> o <code>data/muebles.json</code>.</div>`;
   }
 }
 
-search.addEventListener("input", () => {
-  const q = search.value.toLowerCase();
-  results.innerHTML = "";
+function render(q){
+  const query = norm(q);
+  results.innerHTML = '';
 
-  if (!q) return;
-
-  productos
-    .filter(p => p.producto.toLowerCase().includes(q))
-    .slice(0, 100)
-    .forEach(p => {
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <strong>${p.producto}</strong><br>
-        Mueble: ${p.mueble} · Ubicación: ${p.ubicacion}
-      `;
-      div.onclick = () => seleccionar(p);
-      results.appendChild(div);
-    });
-});
-
-function seleccionar(p) {
-  overlay.innerHTML = "";
-
-  const m = muebles[p.id_mueble] || muebles[p.mueble];
-
-  // ✅ fallback si no hay mueble
-  if (!m) {
-    img.src = "";
+  if(!query){
+    results.innerHTML = `<div class="empty">Escribe para buscar (ej: <strong>comprimidos</strong>).</div>`;
     return;
   }
 
-  img.src = m.image;
+  const hits = productos
+    .filter(p => norm(p.producto).includes(query))
+    .slice(0, 120);
 
-  img.onload = () => {
-    overlay.innerHTML = "";
+  if(hits.length === 0){
+    results.innerHTML = `<div class="empty">Sin resultados para <strong>${escapeHtml(q)}</strong>.</div>`;
+    return;
+  }
 
-    const z = m.zones[p.ubicacion];
+  for(const p of hits){
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `
+      <div class="itemTitle">${escapeHtml(p.producto)}</div>
+      <div class="itemMeta">Mueble: <strong>${escapeHtml(p.mueble)}</strong> • Ubicación: <strong>${escapeHtml(p.ubicacion)}</strong></div>
+    `;
+    div.addEventListener('click', () => seleccionar(p));
+    results.appendChild(div);
+  }
+}
 
-    if (!z) return;
+function seleccionar(p){
+  const keyId = (p.id_mueble || '').toString().trim();
+  const keyNombre = (p.mueble || '').toString().trim();
 
-    const sx = img.clientWidth / img.naturalWidth;
-    const sy = img.clientHeight / img.naturalHeight;
+  const m = (keyId && muebles[keyId]) ? muebles[keyId] : muebles[keyNombre];
 
-    const box = document.createElement("div");
-    box.style.position = "absolute";
-    box.style.background = "rgba(232,44,154,0.2)";
-    box.style.border = "3px solid #E82C9A";
+  // Si NO hay mueble configurado, devolvemos texto del campo MUEBLE (requisito).
+  if(!m){
+    overlay.innerHTML = '';
+    muebleImg.removeAttribute('src');
 
-    // ✅ POLÍGONO
-    if (z.poly) {
-      const pts = z.poly.map(pt =>
-        `${pt[0] * sx}px ${pt[1] * sy}px`
-      ).join(",");
+    viewerTitle.textContent = p.producto;
+    viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
 
-      box.style.clipPath = `polygon(${pts})`;
-      box.style.left = "0";
-      box.style.top = "0";
-      box.style.width = "100%";
-      box.style.height = "100%";
-    } else {
-      // fallback rectángulo
-      box.style.left = z.x * sx + "px";
-      box.style.top = z.y * sy + "px";
-      box.style.width = z.w * sx + "px";
-      box.style.height = z.h * sy + "px";
+    card.hidden = false;
+    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
+    smallMueble.textContent = keyNombre;
+    cardProducto.textContent = p.producto;
+    return;
+  }
+
+  // Cargar imagen del mueble
+  muebleImg.onerror = () => {
+    overlay.innerHTML = '';
+    viewerTitle.textContent = p.producto;
+    viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
+
+    card.hidden = false;
+    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
+    smallMueble.textContent = keyNombre;
+    cardProducto.textContent = p.producto;
+  };
+
+  muebleImg.src = m.image;
+
+  muebleImg.onload = () => {
+    overlay.innerHTML = '';
+
+    const ub = (p.ubicacion || '').toString().trim();
+    const z = (m.zones || {})[ub];
+
+    viewerTitle.textContent = p.producto;
+    viewerMeta.textContent = `Mueble: ${keyNombre} • Ubicación: ${p.ubicacion}`;
+
+    card.hidden = false;
+    badgeUbic.textContent = `Ubicación ${p.ubicacion}`;
+    smallMueble.textContent = keyNombre;
+    cardProducto.textContent = p.producto;
+
+    // Si la zona no existe, mostramos igual el texto (sin pintar)
+    if(!z){
+      return;
     }
 
+    const scaleX = muebleImg.clientWidth / muebleImg.naturalWidth;
+    const scaleY = muebleImg.clientHeight / muebleImg.naturalHeight;
+
+    const box = document.createElement('div');
+    box.className = 'highlight';
+    box.style.left = (z.x * scaleX) + 'px';
+    box.style.top  = (z.y * scaleY) + 'px';
+    box.style.width  = (z.w * scaleX) + 'px';
+    box.style.height = (z.h * scaleY) + 'px';
+
     overlay.appendChild(box);
+    document.getElementById('imageWrap').scrollIntoView({behavior:'smooth', block:'start'});
   };
 }
 
-// 🚀 iniciar
+function limpiar(){
+  overlay.innerHTML = '';
+  viewerTitle.textContent = 'Selecciona un producto';
+  viewerMeta.textContent = 'Se mostrará el mueble y la ubicación.';
+  card.hidden = true;
+  muebleImg.removeAttribute('src');
+}
+
+let t=null;
+search.addEventListener('input', () => {
+  clearTimeout(t);
+  t = setTimeout(() => render(search.value), 80);
+});
+
+clearBtn.addEventListener('click', () => {
+  search.value='';
+  render('');
+  limpiar();
+});
+
 cargar();
